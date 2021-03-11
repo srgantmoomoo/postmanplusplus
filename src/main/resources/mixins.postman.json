@@ -1,0 +1,31 @@
+{
+"required": true,
+"compatibilityLevel": "JAVA_8",
+"package": "me.srgantmoomoo.postman.api.mixin.mixins",
+"refmap": "mixins.postman.refmap.json",
+"mixins": [
+	"MixinBlockLiquid",
+	"MixinBlockSlimeBlock",
+	"MixinBlockSoulSand",
+	"MixinBlockWeb",
+	"MixinEntity",
+	"MixinEntityPlayer",
+	"MixinEntityPlayerSP",
+	"MixinEntityRenderer",
+	"MixinGuiMainMenu",
+	"MixinGuiPlayerTabOverlay",
+	"MixinGuiScreen",
+	"MixinItemRenderer",
+	"MixinMovementInputFromOptions",
+	"MixinNetworkManager",
+	"MixinGuiIngame",
+	"MixinRender",
+	"MixinRenderLivingBase",
+	"MixinWorld",
+	"MixinMinecraft",
+	"MixinPlayerControllerMP",
+	"MixinRenderPlayer",
+	"MixinAbstractClientPlayer",
+	"accessor.AccessorEntityPlayerSP"
+]
+}
