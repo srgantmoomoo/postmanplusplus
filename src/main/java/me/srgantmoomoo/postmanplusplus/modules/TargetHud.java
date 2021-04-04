@@ -30,14 +30,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 public class TargetHud extends HudModule {
-	public ColorSetting background = new ColorSetting("color", this, new JColor(0, 0, 0));
-	public ColorSetting text = new ColorSetting("text", this, new JColor(255, 85, 255));
+	public ColorSetting background = new ColorSetting("backgroundColor", this, new JColor(0, 0, 0));
+	public ColorSetting text = new ColorSetting("textColor", this, new JColor(157, 216, 255));
 	public NumberSetting range = new NumberSetting("range", this, 100, 10, 260, 1);
 	
     private static EntityPlayer targetPlayer;
     
     public TargetHud() {
-        super("targetHud" + TextFormatting.LIGHT_PURPLE + "++", "targetttt.", new Point(0,70), Category.RENDER);
+        super("" + TextFormatting.RESET + TextFormatting.ITALIC + "targetHud" + TextFormatting.OBFUSCATED + "++", "targetttt.", new Point(0,70), Category.HUD);
         this.addSettings(range, text, background);
     }
     

@@ -13,7 +13,6 @@ import com.lukflug.panelstudio.theme.RendererBase;
 import com.lukflug.panelstudio.theme.Theme;
 
 import me.srgantmoomoo.postman.api.util.render.JColor;
-
 /**
  * @author SrgantMooMoo
  */
@@ -78,6 +77,33 @@ public class PostmanTheme implements Theme {
 			context.getInterface().drawString(stringPos,text,new JColor (255, 255, 255, 255));
 		}
 
+
+		/*@Override
+		public void renderTitle(Context context, String text, boolean focus, boolean active, boolean open) {
+			ResourceLocation watermark = new ResourceLocation(Reference.MOD_ID, "textures/watermark.png");
+			Rectangle rectangle;
+			
+			super.renderTitle(context,text,focus,active,open);
+				Color color=getFontColor(active);
+				Point point=new Point(context.getPos().x+context.getSize().width-2,	context.getPos().y+context.getSize().height/4);
+				if (open) {
+					//drawSetting();
+				}else {
+				}
+		}
+		
+		public int drawSetting() {
+			try {
+                BufferedImage image = ImageIO.read(Main.class.getResource("/assets/pst/textures/postmail.png"));
+                int texture = TextureUtil.glGenTextures();
+                TextureUtil.uploadTextureImage(texture, image);
+                return texture;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return 0;
+            }
+		}*/
+		
 		@Override
 		public void renderBackground (Context context, boolean focus) {
 				//Color color=getBackgroundColor(focus);

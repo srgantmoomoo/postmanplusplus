@@ -3,6 +3,8 @@ package me.srgantmoomoo.postman.client.friend;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.srgantmoomoo.Main;
+
 public class FriendManager {
 
 	public static List<Friend> friends;
@@ -43,9 +45,17 @@ public class FriendManager {
 
 	public static void addFriend(String name) {
 		friends.add(new Friend(name));
+		
+		if(Main.saveLoad != null) {
+			Main.saveLoad.save();
+		}
 	}
 
 	public static void removeFriend(String name) {
 		friends.remove(getFriendByName(name));
+	}
+	
+	public static void clearFriends() {
+		friends.clear();
 	}
 }

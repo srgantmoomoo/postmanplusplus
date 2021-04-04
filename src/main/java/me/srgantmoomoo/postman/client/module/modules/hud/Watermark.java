@@ -15,7 +15,7 @@ import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
 
 
 public class Watermark extends HudModule {
-	public ColorSetting color = new ColorSetting("color", this, new JColor(121, 193, 255, 255)); 
+	public ColorSetting color = new ColorSetting("color", this, new JColor(157, 216, 255, 255)); 
 
 	public Watermark() {
 		super("watermark", "postman watermark!", new Point(-3,1), Category.HUD);

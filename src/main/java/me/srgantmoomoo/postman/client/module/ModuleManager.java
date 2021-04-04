@@ -13,20 +13,10 @@ import me.srgantmoomoo.Reference;
 import me.srgantmoomoo.postman.api.event.events.RenderEvent;
 import me.srgantmoomoo.postman.api.util.render.Esp2dHelper;
 import me.srgantmoomoo.postman.api.util.render.JTessellator;
+import me.srgantmoomoo.postman.client.module.modules.bot.*;
 import me.srgantmoomoo.postman.client.module.modules.client.*;
 import me.srgantmoomoo.postman.client.module.modules.exploits.*;
-import me.srgantmoomoo.postman.client.module.modules.hud.ArmorHud;
-import me.srgantmoomoo.postman.client.module.modules.hud.ArrayListt;
-import me.srgantmoomoo.postman.client.module.modules.hud.AutoCInfo;
-import me.srgantmoomoo.postman.client.module.modules.hud.Coords;
-import me.srgantmoomoo.postman.client.module.modules.hud.Frames;
-import me.srgantmoomoo.postman.client.module.modules.hud.InventoryViewer;
-import me.srgantmoomoo.postman.client.module.modules.hud.KillAuraInfo;
-import me.srgantmoomoo.postman.client.module.modules.hud.Ping;
-import me.srgantmoomoo.postman.client.module.modules.hud.PlayerModel;
-import me.srgantmoomoo.postman.client.module.modules.hud.SurroundInfo;
-import me.srgantmoomoo.postman.client.module.modules.hud.Totems;
-import me.srgantmoomoo.postman.client.module.modules.hud.Watermark;
+import me.srgantmoomoo.postman.client.module.modules.hud.*;
 import me.srgantmoomoo.postman.client.module.modules.movement.*;
 import me.srgantmoomoo.postman.client.module.modules.player.*;
 import me.srgantmoomoo.postman.client.module.modules.pvp.*;
@@ -47,108 +37,113 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 public class ModuleManager {
 	
-	public static ArrayList<Module> modules;
+	public static ArrayList<Module> modules = new ArrayList<>();
 	
-	public ModuleManager() {
+	public ModuleManager() { 
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		modules = new ArrayList<>();
-		
 		//alphabetic
-		ModuleManager.modules.add(new AimBot());	
-		ModuleManager.modules.add(new AntiHunger());
-		ModuleManager.modules.add(new AntiNick());	
-		ModuleManager.modules.add(new AntiSwing());
-		ModuleManager.modules.add(new AutoArmor());	
-		ModuleManager.modules.add(new AutoClicker());
-		//ModuleManager.modules.add(new AutoCopeAndSeethe());
-		ModuleManager.modules.add(new AutoCrystal());
-		ModuleManager.modules.add(new AutoDisconnect());
-		ModuleManager.modules.add(new AutoElytra());
-		ModuleManager.modules.add(new AutoGap());	
-		ModuleManager.modules.add(new AutoHut());
-		ModuleManager.modules.add(new AutoMine());	
-		ModuleManager.modules.add(new AutoReconnect());	
-		ModuleManager.modules.add(new AutoRespawn());	
-		ModuleManager.modules.add(new AutoTotem());	
-		ModuleManager.modules.add(new AutoTrap());
-		ModuleManager.modules.add(new AutoUse());	
-		ModuleManager.modules.add(new AutoWalk());
-		ModuleManager.modules.add(new Backdoor2b2t());
-		ModuleManager.modules.add(new Blink());	
-		ModuleManager.modules.add(new CameraClip());	
-		ModuleManager.modules.add(new ChatBot());	
-		ModuleManager.modules.add(new ChatSuffix());
-		ModuleManager.modules.add(new ChestStealer());
-		ModuleManager.modules.add(new CoordExploit());
-		ModuleManager.modules.add(new CraftingSlots());	
-		ModuleManager.modules.add(new Criticals());	
-		ModuleManager.modules.add(new DamageTiltCorrection());	
-		ModuleManager.modules.add(new DeathCoords());	
-		ModuleManager.modules.add(new Dupe());	
-		ModuleManager.modules.add(new ElytraFly());	
-		ModuleManager.modules.add(new Esp());
-		ModuleManager.modules.add(new FastUse());
-		ModuleManager.modules.add(new FootExp());
-		ModuleManager.modules.add(new Freecam());	
-		ModuleManager.modules.add(new FullBright());	
-		ModuleManager.modules.add(new HoleEsp());
-		ModuleManager.modules.add(new HoleTp());
-		ModuleManager.modules.add(new InventoryMove());	
-		ModuleManager.modules.add(new Jesus());	
-		ModuleManager.modules.add(new KillAura());	
-		ModuleManager.modules.add(new LiquidPlace());
-		ModuleManager.modules.add(new LogOutSpot());
-		ModuleManager.modules.add(new LongJump());
-		ModuleManager.modules.add(new LowOffHand());
-		ModuleManager.modules.add(new Multitask());
-		ModuleManager.modules.add(new Nametags());	
-		ModuleManager.modules.add(new NewChunks());	
-		ModuleManager.modules.add(new NoFall());
-		ModuleManager.modules.add(new NoHandShake());	
-		ModuleManager.modules.add(new NoPush());
-		ModuleManager.modules.add(new NoRender());
-		ModuleManager.modules.add(new NoSlow());
-		ModuleManager.modules.add(new Peek());
-		ModuleManager.modules.add(new PlayerClone());
-		ModuleManager.modules.add(new PortalGodMode());
-		ModuleManager.modules.add(new PlayerModel());
-		ModuleManager.modules.add(new ReverseStep());
-		ModuleManager.modules.add(new SafeWalk());
-		ModuleManager.modules.add(new Scaffold());	
-		ModuleManager.modules.add(new SmartOffHand());	
-		ModuleManager.modules.add(new Sneak());
-		ModuleManager.modules.add(new Speed());
-		ModuleManager.modules.add(new Sprint());	
-		ModuleManager.modules.add(new Step());
-		ModuleManager.modules.add(new Surround());
-		ModuleManager.modules.add(new Timer());	
-		ModuleManager.modules.add(new Tracers());
-		ModuleManager.modules.add(new Velocity());	
-		ModuleManager.modules.add(new ViewModel());	
-		ModuleManager.modules.add(new Xray());
+		//modules.add(new AimBot());	// unstarted
+		modules.add(new AntiHunger());
+		//modules.add(new AntiNick());	// w i p
+		modules.add(new AntiSwing());
+		modules.add(new AutoArmor());	
+		modules.add(new AutoClicker());
+		modules.add(new AutoCopeAndSeethe()); // w i p
+		modules.add(new AutoCrystal());
+		modules.add(new AutoDisconnect());
+		modules.add(new AutoGap());	
+		//modules.add(new AutoHut());   // unstarted
+		modules.add(new AutoMine());	
+		modules.add(new AutoReconnect());	
+		modules.add(new AutoRespawn());	
+		modules.add(new AutoTotem());	
+		//modules.add(new AutoTrap());   // unstarted
+		modules.add(new AutoUse());	
+		modules.add(new AutoWalk());
+		modules.add(new Backdoor2b2t());
+		modules.add(new Blink());	
+		modules.add(new CameraClip());	
+		//modules.add(new ChatBot());	// unstarted
+		modules.add(new ChatSuffix());
+		modules.add(new ChestStealer());
+		//modules.add(new CoordExploit());
+		modules.add(new Criticals());	
+		modules.add(new DamageTiltCorrection());	
+		modules.add(new DeathCoords());	                             // --- integrate with notifications.
+		modules.add(new Dupe());	
+		//modules.add(new ElytraFly());   // unstarted
+		//modules.add(new ElytraReplace());  // unstarted
+		modules.add(new Esp());
+		modules.add(new FastUse());
+		modules.add(new FootExp());
+		modules.add(new Freecam());	
+		modules.add(new FullBright());	
+		modules.add(new GuiMove());
+		modules.add(new HoleEsp());
+		modules.add(new HoleTp());
+		modules.add(new InventoryPlus());	
+		modules.add(new Jesus());	
+		modules.add(new KillAura());	
+		modules.add(new LiquidPlace());
+		//modules.add(new LogOutSpot());  // unstarted
+		//modules.add(new LongJump());   // unstarted
+		modules.add(new LowOffHand());
+		modules.add(new Mcf());
+		modules.add(new Multitask());
+		//modules.add(new Nametags());	// unstarted           									---------------------------
+		//modules.add(new NewChunks());	// unstarted
+		modules.add(new NoFall());
+		modules.add(new NoHandShake());	
+		modules.add(new NoPush());
+		modules.add(new NoRender());
+		modules.add(new NoSlow());
+		modules.add(new OffHandBot());
+		modules.add(new PacketCancellor());
+		modules.add(new Peek());
+		modules.add(new PlayerClone());
+		modules.add(new PortalGodMode());
+		modules.add(new Protester());
+		modules.add(new ReverseStep());
+		modules.add(new SafeWalk());
+		//modules.add(new Scaffold());	// unstarted
+		//modules.add(new SmartHotbar()); // unstarted
+		modules.add(new SmartOffHand());	
+		//modules.add(new Sneak());    // unstarted
+		modules.add(new Speed());
+		modules.add(new Sprint());	
+		modules.add(new Step());
+		modules.add(new Surround());
+		modules.add(new Timer());	
+		modules.add(new Tracers());
+		modules.add(new Velocity());	
+		modules.add(new ViewModel());	
+		//modules.add(new Xray());    // unstarted						-------------------------
 		//hud
-		ModuleManager.modules.add(new Watermark());
-		ModuleManager.modules.add(new Totems());
-		ModuleManager.modules.add(new Ping());
-		ModuleManager.modules.add(new Frames());
-		ModuleManager.modules.add(new AutoCInfo());
-		ModuleManager.modules.add(new KillAuraInfo());
-		ModuleManager.modules.add(new SurroundInfo());
-		ModuleManager.modules.add(new ArrayListt());
-		ModuleManager.modules.add(new InventoryViewer());
-		ModuleManager.modules.add(new Coords());
-		ModuleManager.modules.add(new ArmorHud());
-		ModuleManager.modules.add(new HudEditor());
+		modules.add(new Watermark());
+		modules.add(new World());
+		modules.add(new Totems());
+		modules.add(new Ping());
+		modules.add(new Frames());
+		modules.add(new AutoCInfo());
+		modules.add(new KillAuraInfo());
+		modules.add(new SurroundInfo());
+		modules.add(new ArrayListt());
+		modules.add(new InventoryViewer());
+		modules.add(new PlayerModel());
+		modules.add(new Coords());
+		modules.add(new ArmorHud());
+		modules.add(new HudEditor());
 		//client
-		//ModuleManager.modules.add(new KeyStrokes());
-		ModuleManager.modules.add(new ClientFont());
-		ModuleManager.modules.add(new Capes());
-		ModuleManager.modules.add(new DiscordRichPresence());
-		ModuleManager.modules.add(new ClickGuiModule());
-	 	ModuleManager.modules.add(new TabGui());
-	 	ModuleManager.modules.add(new MainMenuInfo());
-		ModuleManager.modules.add(new Esp2dHelper());
+		//modules.add(new KeyStrokes());
+		modules.add(new ClientFont());
+		modules.add(new Capes());
+		modules.add(new DiscordRichPresence());
+		modules.add(new ClickGuiModule());
+	 	modules.add(new TabGui());
+	 	modules.add(new MainMenuWatermark());
+		modules.add(new Esp2dHelper());
+		modules.add(new CrazyNewDupe());
 	}
 	
 	public static void onUpdate() {
@@ -157,7 +152,7 @@ public class ModuleManager {
 	
 	public static void onRender() {
 		modules.stream().filter(Module::isToggled).forEach(Module::onRender);
-		Main.getInstance().clickGui.render();
+		Main.clickGui.render();
 	}
 	
 	public static void onWorldRender(RenderWorldLastEvent event) {
@@ -218,8 +213,8 @@ public class ModuleManager {
 		return null;
 	}
 	
-	public ArrayList<Module> getModuleList() {
-		return ModuleManager.modules;
+	public static ArrayList<Module> getModules() {
+		return modules;
 	}
 	
 	public static List<Module> getModulesByCategory(Category c) {
@@ -229,15 +224,12 @@ public class ModuleManager {
 			if(!m.getName().equals("Esp2dHelper")) {
 			if(m.getCategory() == c)
 				modules.add(m);
-		}
+			}
 		}
 		return modules;
 	}
 	
-	public static ArrayList<Module> getModules() {
-		return modules;
-	}
-	
+	// this works best with panelstudio for whatever reason, ill delete one of these soon.
 	public static ArrayList<Module> getModulesInCategory(Category c){
 		ArrayList<Module> list = (ArrayList<Module>) getModules().stream().filter(m -> m.getCategory().equals(c)).collect(Collectors.toList());
 		return list;

@@ -6,6 +6,7 @@ import me.srgantmoomoo.postman.api.event.events.RenderEvent;
 import me.srgantmoomoo.postman.api.util.render.JColor;
 import me.srgantmoomoo.postman.api.util.render.JTessellator;
 import me.srgantmoomoo.postman.api.util.world.JTimer;
+import me.srgantmoomoo.postman.client.friend.FriendManager;
 import me.srgantmoomoo.postman.client.module.Category;
 import me.srgantmoomoo.postman.client.module.Module;
 import me.srgantmoomoo.postman.client.setting.settings.BooleanSetting;
@@ -43,6 +44,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
+import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -50,6 +52,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.lwjgl.input.Keyboard;
+
+import com.google.common.collect.Lists;
 
 /**
  * @Author SrgantMooMoo
@@ -62,40 +66,64 @@ import org.lwjgl.input.Keyboard;
  * also, i'm using some crystalUtils from gamesense listed below.
  */
 
+/*
+ * rewritten on 3/15/21 by SrgantMooMoo
+ */
+
 public class AutoCrystal extends Module {
-	//redo
-	public BooleanSetting breakCrystal = new BooleanSetting("brkCrystal", this, true);
-	public NumberSetting breakSpeed = new NumberSetting("brkSpeed", this, 20, 0, 20, 1);
-	public ModeSetting breakType = new ModeSetting("brkType", this, "packet", "swing", "packet");
-	public ModeSetting breakHand = new ModeSetting("brkHand", this, "both", "main", "offhand", "both");
-	public ModeSetting breakMode = new ModeSetting("brkMode", this, "all", "all", "smart", "own");
-	public NumberSetting breakRange = new NumberSetting("brkRange", this, 4.4, 0.0, 10.0, 0.1);
 	
-	public BooleanSetting placeCrystal = new BooleanSetting("plcCrystal", this, true);
-	public NumberSetting placeRange = new NumberSetting("plcRange", this, 4.4, 0.0, 6.0, 0.1);
+	// rewrite
+	public BooleanSetting switchToCrystal = new BooleanSetting("switchToCrystal", this, false);
+	
+	public BooleanSetting breakCrystal = new BooleanSetting("breakCrystal", this, true);
+	public BooleanSetting placeCrystal = new BooleanSetting("placeCrystal", this, true);
+	
+	public ModeSetting logic = new ModeSetting("logic", this, "break, place", "break, place", "place, break");
+	
+	public NumberSetting breakSpeed = new NumberSetting("breakSpeed", this, 20, 0, 20, 1);
+	public ModeSetting breakType = new ModeSetting("breakType", this, "packet", "swing", "packet");
+	public ModeSetting breakHand = new ModeSetting("breakHand", this, "both", "main", "offhand", "both");
+	public ModeSetting breakMode = new ModeSetting("breakMode", this, "all", "all", "smart", "own");
+	public NumberSetting breakRange = new NumberSetting("breakRange", this, 4.4, 0.0, 10.0, 0.1);
+	
+	public NumberSetting placeRange = new NumberSetting("placeRange", this, 4.4, 0.0, 6.0, 0.1);
+	
+	//public BooleanSetting facePlace = new BooleanSetting("facePlace", this, false);
 	public NumberSetting facePlaceValue = new NumberSetting("facePlcVal", this, 8, 0, 36, 1);
 	
+	public BooleanSetting highPing = new BooleanSetting("highPing", this, true);
+	
+	public BooleanSetting antiGhost = new BooleanSetting("antiGhosting", this, true);
+	
 	public BooleanSetting raytrace = new BooleanSetting("raytrace", this, true);
-	public BooleanSetting outline = new BooleanSetting("outline", this, false);
-	public BooleanSetting showDamage = new BooleanSetting("showDamage", this, true);
 	
-	public NumberSetting maxSelfDmg = new NumberSetting("maxSelfDmg", this, 10, 0, 36, 1);
-	public NumberSetting wallsRange = new NumberSetting("wallsRange", this, 3.5, 0.0, 10.0, 0.1);
-	public NumberSetting minDmg = new NumberSetting("minDmg", this, 5, 0, 36, 1);
-	public NumberSetting enemyRange = new NumberSetting("enemyRange", this, 6.0, 0.0, 16.0, 1.0);
-	
-	public BooleanSetting mode113 = new BooleanSetting("1.13place", this, false);
-	public BooleanSetting switchToCrystal = new BooleanSetting("switchToCrystal", this, false);
-	public BooleanSetting cancelCrystal = new BooleanSetting("cancelCrystal", this, true);
 	public BooleanSetting rotate = new BooleanSetting("rotate", this, true);
 	public BooleanSetting spoofRotations = new BooleanSetting("spoofRotations", this, true);
 	
-	public ColorSetting color = new ColorSetting("color", this, new JColor(121, 193, 255, 255));
+	public NumberSetting minDmg = new NumberSetting("minDmg", this, 5, 0, 36, 1);
+	
+	public BooleanSetting multiplace = new BooleanSetting("multiplace", this, false);
+	public NumberSetting multiplaceValue = new NumberSetting("multiplaceValue", this, 2, 1, 10, 1);
+	public BooleanSetting multiplacePlus = new BooleanSetting("multiplacePlus", this, true);
+	
+	public BooleanSetting antiSuicide = new BooleanSetting("antiSuicide", this, false);
+	public NumberSetting maxSelfDmg = new NumberSetting("antiSuicideValue", this, 10, 0, 36, 1);
+	
+	public BooleanSetting antiSelfPop = new BooleanSetting("antiSelfPop", this, true);
+	
+	public NumberSetting enemyRange = new NumberSetting("range", this, 6.0, 0.0, 16.0, 1.0);
+	public NumberSetting wallsRange = new NumberSetting("wallsRange", this, 3.5, 0.0, 10.0, 0.1);
+	
+	public BooleanSetting mode113 = new BooleanSetting("1.13place", this, false);
+	
+	public BooleanSetting outline = new BooleanSetting("outline", this, false);
+	public BooleanSetting showDamage = new BooleanSetting("showDamage", this, true);
+	public ColorSetting color = new ColorSetting("color", this, new JColor(157, 216, 255, 255));
 
 	public AutoCrystal() {
 		super ("autoCrystal", "best ca on the block.", Keyboard.KEY_NONE, Category.PVP);
-		this.addSettings(breakCrystal,placeCrystal,breakMode,breakType,breakHand,breakSpeed,breakRange,placeRange,cancelCrystal,switchToCrystal,mode113,rotate,spoofRotations,minDmg,maxSelfDmg,wallsRange
-				,enemyRange,facePlaceValue,raytrace,outline,showDamage,color);
+		this.addSettings(switchToCrystal, breakCrystal, placeCrystal, logic, breakSpeed, breakType, breakMode, breakHand, breakRange, placeRange, highPing, antiGhost, raytrace, rotate,
+				spoofRotations, mode113, multiplace, multiplaceValue, multiplacePlus, antiSuicide, maxSelfDmg, antiSelfPop, minDmg, facePlaceValue, enemyRange, wallsRange, showDamage, outline, color);
 	}
 	
 	private boolean switchCooldown = false;
@@ -103,7 +131,8 @@ public class AutoCrystal extends Module {
 	private EnumFacing enumFacing;
 	private Entity renderEnt;
 	
-	private final ArrayList<BlockPos> PlacedCrystals = new ArrayList<BlockPos>();
+	public static final ArrayList<BlockPos> PlacedCrystals = new ArrayList<BlockPos>();
+	public static boolean ghosting = false;;
 	public boolean active = false;
 	boolean offHand = false;
 	private static boolean togglePitch = false;
@@ -116,6 +145,7 @@ public class AutoCrystal extends Module {
 		Main.EVENT_BUS.subscribe(this);
 		PlacedCrystals.clear();
 		active = false;
+		ghosting = false;
 	}
 	
 	@Override
@@ -127,18 +157,30 @@ public class AutoCrystal extends Module {
         resetRotation();
         PlacedCrystals.clear();
         active = false;
+        ghosting = false;
 	}
 	
 	public void onUpdate() {
 		if(mc.player == null || mc.world == null)
 			return;
-		
 		implementLogic();
+		
+		if(antiGhost.isEnabled()) {
+			// && player is placeablee
+			if(breakCrystal.isEnabled() && placeCrystal.isEnabled() && !active) {
+				ghosting = true;
+			}else ghosting = false;
+		}
 	}
 	
 	private void implementLogic() {
-		breakLogic();
-		placeLogic();
+		if(logic.is("break, place")) {
+			breakLogic();
+			placeLogic();
+		}else if(logic.is("place, break")) {
+			placeLogic();
+			breakLogic();
+		}
 	}
 	
 	private void breakLogic() {
@@ -151,9 +193,9 @@ public class AutoCrystal extends Module {
                  .orElse(null);
 		 
 		 if(breakCrystal.isEnabled() && crystal !=null) {
-			 if (!mc.player.canEntityBeSeen(crystal) && mc.player.getDistance(crystal) > wallsRange.getValue())
-	                return;
-			 
+			 if (!mc.player.canEntityBeSeen(crystal) && mc.player.getDistance(crystal) > wallsRange.getValue()) 
+				 return;
+
 			 if(timer.getTimePassed() / 50 >= 20 - breakSpeed.getValue()) {
 				 timer.reset();
 				 active=true;
@@ -170,19 +212,19 @@ public class AutoCrystal extends Module {
 					 swingArm();
 				 }
 				 
-				 if(cancelCrystal.isEnabled()) {
-					 crystal.setDead();
-					 mc.world.removeAllEntities();
-					 mc.world.getLoadedEntityList();
-				 }
+				 if (highPing.isEnabled()) {
+	                    crystal.setDead();
+	                    mc.world.removeAllEntities();
+	                    mc.world.getLoadedEntityList();
+	                }
 				 
-				 active=false;
+				 active = false;
 			 }
 		 }
 		 else {
 			 resetRotation();
 			 
-			 active=false;
+			 active = false;
 		 }
 	}
 	
@@ -229,7 +271,7 @@ public class AutoCrystal extends Module {
         }
 		
 		for(Entity entity : entities) {
-			if(entity == mc.player || ((EntityLivingBase)entity).getHealth() <= 0) continue;
+			if(entity == mc.player || FriendManager.isFriend(entity.getName()) || ((EntityLivingBase)entity).getHealth() <= 0) continue;
 			
 			for(BlockPos blockPos : blocks) {
 				double b = entity.getDistanceSq(blockPos);
@@ -239,15 +281,15 @@ public class AutoCrystal extends Module {
 				
 				double d = calculateDamage(blockPos.getX() + 0.5D, blockPos.getY() + 1, blockPos.getZ() + 0.5D, entity);
 				
-				if(d < minDmg.getValue() && ((EntityLivingBase)entity).getHealth() + ((EntityLivingBase) entity).getAbsorptionAmount() > facePlaceValue.getValue()) 
+				if(d <= minDmg.getValue() && ((EntityLivingBase)entity).getHealth() + ((EntityLivingBase) entity).getAbsorptionAmount() > facePlaceValue.getValue()) 
 					continue;
 				
 				if (d > damage) {
                     double self = calculateDamage(blockPos.getX() + 0.5D, blockPos.getY() + 1, blockPos.getZ() + 0.5D, mc.player);
 
-                    if ((self > d && !(d < ((EntityLivingBase) entity).getHealth())) || self - 0.5D > mc.player.getHealth()) continue;
+                    if ((self > d && !(d < ((EntityLivingBase) entity).getHealth())) || self - 0.5D > mc.player.getHealth() && antiSelfPop.isEnabled()) continue;
 
-                    if (self > maxSelfDmg.getValue()) 
+                    if (antiSuicide.isEnabled() && self > maxSelfDmg.getValue()) 
                     	continue;
 
                     damage = d;
@@ -378,7 +420,89 @@ public class AutoCrystal extends Module {
             }
         }
     });
-	
+    
+    @EventHandler
+    private final Listener<PacketEvent.Receive> packetReceiveListener2 = new Listener<>(event -> {
+        if (event.getPacket() instanceof SPacketSoundEffect) {
+            final SPacketSoundEffect packet = (SPacketSoundEffect) event.getPacket();
+            if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
+                for (BlockPos blockPos : PlacedCrystals) {
+                    if (blockPos.getDistance((int) packet.getX(), (int) packet.getY(), (int) packet.getZ()) <= 6) {
+                        CPacketUseEntity cPacketUseEntity = new CPacketUseEntity(new EntityEnderCrystal(mc.world, blockPos.getX(), blockPos.getY(), blockPos.getZ()));
+                        mc.player.connection.sendPacket(cPacketUseEntity);
+                        PlacedCrystals.remove(blockPos);
+                        return;
+                    }
+                }
+                for (Entity e : Minecraft.getMinecraft().world.loadedEntityList) {
+                    if (e instanceof EntityEnderCrystal) {
+                        if (e.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= 6.0f) {
+                            e.setDead();
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    /*
+     * somewhat custom crystal utils
+     */
+    
+    public boolean canPlaceCrystal(BlockPos blockPos) {
+        BlockPos airBlock1 = blockPos.add(0, 1, 0);
+        BlockPos airBlock2 = blockPos.add(0, 2, 0);
+        
+        boolean crystal = mc.world.loadedEntityList.stream()
+                .filter(entity -> entity instanceof EntityEnderCrystal)
+                .filter(e -> mc.player.getDistance(e) <= breakRange.getValue())
+                .filter(e -> crystalCheck(e))
+                .map(entity -> (EntityEnderCrystal) entity)
+                .min(Comparator.comparing(c -> mc.player.getDistance(c)))
+                .orElse(null) != null;
+        
+        if(mode113.isEnabled()) {
+        	return (mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
+                    || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
+                    && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock1)).isEmpty()
+                    && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock2)).isEmpty();
+        }
+
+        if(!multiplace.isEnabled() && !highPing.isEnabled() && !crystal) {
+        	return (mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
+	                || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
+	                && mc.world.getBlockState(airBlock1).getBlock() == Blocks.AIR
+	                && mc.world.getBlockState(airBlock2).getBlock() == Blocks.AIR
+	                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock1)).isEmpty()
+	                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock2)).isEmpty();
+        }else if(!multiplace.isEnabled() && !highPing.isEnabled() && crystal) return false;
+        
+        if(multiplace.isEnabled() && !multiplacePlus.isEnabled() && PlacedCrystals.size() > multiplaceValue.getValue()) {
+        	return false;
+        }else if((multiplace.isEnabled() && PlacedCrystals.size() <= multiplaceValue.getValue()) || (multiplace.isEnabled() && multiplacePlus.isEnabled())) {
+        	return (mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
+                    || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
+                    && mc.world.getBlockState(airBlock1).getBlock() == Blocks.AIR
+                    && mc.world.getBlockState(airBlock2).getBlock() == Blocks.AIR
+                    && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock1)).isEmpty()
+                    && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock2)).isEmpty();
+        }
+        
+        return (mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
+                || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
+                && mc.world.getBlockState(airBlock1).getBlock() == Blocks.AIR
+                && mc.world.getBlockState(airBlock2).getBlock() == Blocks.AIR
+                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock1)).isEmpty()
+                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(airBlock2)).isEmpty();
+    }
+    
+    private List<BlockPos> findCrystalBlocks() {
+        NonNullList<BlockPos> positions = NonNullList.create();
+        // positions.addAll(getSphere(loc, r, h, hollow, sphere, plus_y))
+        positions.addAll(getSphere(getPlayerPos(), (float)placeRange.getValue(), (int)placeRange.getValue(), false, true, 0).stream().filter(this::canPlaceCrystal).collect(Collectors.toList()));
+        return positions;
+    }
+    
 	/*
 	 * Crystal Utils from gamesense
 	 */
@@ -479,24 +603,6 @@ public class AutoCrystal extends Module {
         return damage;
     }
 	
-	public boolean canPlaceCrystal(BlockPos blockPos) {
-        BlockPos boost = blockPos.add(0, 1, 0);
-        BlockPos boost2 = blockPos.add(0, 2, 0);
-        if(mode113.isEnabled()) {
-        	return (mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
-                    || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
-                    && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty()
-                    && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)).isEmpty();
-        }else {
-        return (mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
-                || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
-                && mc.world.getBlockState(boost).getBlock() == Blocks.AIR
-                && mc.world.getBlockState(boost2).getBlock() == Blocks.AIR
-                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty()
-                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)).isEmpty();
-        }
-    }
-	
 	public List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plus_y) {
         List<BlockPos> circleblocks = new ArrayList<>();
         int cx = loc.getX();
@@ -518,12 +624,6 @@ public class AutoCrystal extends Module {
 	
 	public static BlockPos getPlayerPos() {
         return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
-    }
-	
-	private List<BlockPos> findCrystalBlocks() {
-        NonNullList<BlockPos> positions = NonNullList.create();
-        positions.addAll(getSphere(getPlayerPos(), (float)placeRange.getValue(), (int)placeRange.getValue(), false, true, 0).stream().filter(this::canPlaceCrystal).collect(Collectors.toList()));
-        return positions;
     }
 	
 	private static void resetRotation() {

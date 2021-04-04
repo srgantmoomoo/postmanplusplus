@@ -12,7 +12,7 @@ import me.srgantmoomoo.postman.client.module.ModuleManager;
 public class Bind extends Command {
 	
 	public Bind() {
-		super("bind", "binds a module by name.", "bind <name> <key> | clear", "b");
+		super("bind", "bind modules to specific keys.", "bind <name> <key> | bind clear", "b");
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class Bind extends Command {
 				if(module.name.equalsIgnoreCase(moduleName)) {
 					module.keyCode.setKeyCode(Keyboard.getKeyIndex(keyName.toUpperCase()));
 					
-					ModuleManager.addChatMessage(String.format(ChatFormatting.GREEN + "%s " + ChatFormatting.GRAY + "was bound to" + ChatFormatting.GREEN + " %s.", module.name, Keyboard.getKeyName(module.getKey())));;
+					ModuleManager.addChatMessage(String.format(ChatFormatting.GREEN + "%s " + ChatFormatting.GRAY + "was bound to" + ChatFormatting.GREEN + " %s", module.name, Keyboard.getKeyName(module.getKey())));;
 					moduleFound = true;
 					break;
 				}
@@ -43,9 +43,9 @@ public class Bind extends Command {
 					module.keyCode.setKeyCode(Keyboard.KEY_NONE);
 				}
 				ModuleManager.addChatMessage("cleared all binds.");
-			} else ModuleManager.addChatMessage("correct usage of bind command -> " + CommandManager.prefix + "bind <module> <key> / or " + CommandManager.prefix + "bind clear");
+			} else CommandManager.correctUsageMsg("", getName(), getSyntax());
 		}
-		if(args.length == 0) ModuleManager.addChatMessage("correct usage of bind command -> " + CommandManager.prefix + "bind <module> <key> / or " + CommandManager.prefix + "bind clear");
+		if(args.length == 0) CommandManager.correctUsageMsg("", getName(), getSyntax());
 	}
 
 }

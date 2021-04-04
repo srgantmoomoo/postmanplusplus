@@ -35,8 +35,9 @@ public class InstantMine extends Module {
 	public BooleanSetting picOnly = new BooleanSetting("picOnly", this, true);
 	
 	public InstantMine() {
-		super("instantMine" + TextFormatting.LIGHT_PURPLE + "++", "this is completey skidded module, check modinfo.", Keyboard.KEY_NONE, Category.EXPLOITS);
+		super("" + TextFormatting.RESET + TextFormatting.ITALIC + "instantMine" + TextFormatting.OBFUSCATED + "++", "this is completey skidded module, check modinfo.", Keyboard.KEY_NONE, Category.EXPLOITS);
 		this.addSettings(autoBreak, delay, picOnly);
+		// TODO actually add it to modinfo lol
 	}
 	
 	private BlockPos renderBlock;

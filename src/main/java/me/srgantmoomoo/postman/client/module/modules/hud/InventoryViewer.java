@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 public class InventoryViewer extends HudModule {
-	public ColorSetting color = new ColorSetting("color", this, new JColor(121, 193, 255, 100)); 
+	public ColorSetting color = new ColorSetting("color", this, new JColor(157, 216, 255, 255)); 
 	public ModeSetting sizee = new ModeSetting("size", this, "normal", "normal", "compact");
     
     public InventoryViewer() {

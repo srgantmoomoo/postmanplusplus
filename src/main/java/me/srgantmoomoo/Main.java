@@ -50,11 +50,11 @@ public class Main {
 	public static SaveLoad saveLoad;
 	public static TabGui tabGui;
 	public static Cape cape;
-	public ClickGui clickGui;
-	public EventProcessor eventProcessor;
-	public CustomFontRenderer customFontRenderer;
-	public ClickGuiSave clickGuiSave;
-	public ClickGuiLoad clickGuiLoad;
+	public static ClickGui clickGui;
+	public static EventProcessor eventProcessor;
+	public static CustomFontRenderer customFontRenderer;
+	public static ClickGuiSave clickGuiSave;
+	public static ClickGuiLoad clickGuiLoad;
 	
 	public static final Logger log = LogManager.getLogger("postman");
 	

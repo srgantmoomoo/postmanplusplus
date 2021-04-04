@@ -201,12 +201,61 @@ public class JTessellator {
 		vertex(bb.minX,bb.maxY,bb.minZ,bufferbuilder);
 		tessellator.draw();
 	}
+	
+	public static void drawPlayerBox(AxisAlignedBB bb, float width, JColor color, int sides) {
+		drawPlayerBox(bb.minX,bb.minY,bb.minZ,bb.maxX-bb.minX, bb.maxY-bb.minY,bb.maxZ-bb.minZ,color,sides);
+}
+	
+	public static void drawPlayerBox(double x, double y, double z, double w, double h, double d, JColor color, int sides) {
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		color.glColor();
+		bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+		if ((sides & GeometryMasks.Quad.DOWN) != 0) {
+			vertex(x+w,y,z,  bufferbuilder);
+			vertex(x+w,y,z+d,bufferbuilder);
+			vertex(x,  y,z+d,bufferbuilder);
+			vertex(x,  y,z,  bufferbuilder);
+		}
+		if ((sides & GeometryMasks.Quad.UP) != 0) {
+			vertex(x+w,y+h,z,  bufferbuilder);
+			vertex(x,  y+h,z,  bufferbuilder);
+			vertex(x,  y+h,z+d,bufferbuilder);
+			vertex(x+w,y+h,z+d,bufferbuilder);
+		}
+		if ((sides & GeometryMasks.Quad.NORTH) != 0) {
+			vertex(x+w,y,  z,bufferbuilder);
+			vertex(x,  y,  z,bufferbuilder);
+			vertex(x,  y+h,z,bufferbuilder);
+			vertex(x+w,y+h,z,bufferbuilder);
+		}
+		if ((sides & GeometryMasks.Quad.SOUTH) != 0) {
+			vertex(x,  y,  z+d,bufferbuilder);
+			vertex(x+w,y,  z+d,bufferbuilder);
+			vertex(x+w,y+h,z+d,bufferbuilder);
+			vertex(x,  y+h,z+d,bufferbuilder);
+		}
+		if ((sides & GeometryMasks.Quad.WEST) != 0) {
+			vertex(x,y,  z,  bufferbuilder);
+			vertex(x,y,  z+d,bufferbuilder);
+			vertex(x,y+h,z+d,bufferbuilder);
+			vertex(x,y+h,z,  bufferbuilder);
+		}
+		if ((sides & GeometryMasks.Quad.EAST) != 0) {
+			vertex(x+w,y,  z+d,bufferbuilder);
+			vertex(x+w,y,  z,  bufferbuilder);
+			vertex(x+w,y+h,z,  bufferbuilder);
+			vertex(x+w,y+h,z+d,bufferbuilder);
+		}
+		tessellator.draw();
+	}
 
 	public static void drawBoundingBoxWithSides(BlockPos blockPos, int width, JColor color, int sides){
 		drawBoundingBoxWithSides(getBoundingBox(blockPos, 1, 1, 1), width, color, sides);
 	}
 
-	//hoosiers put this together with blood, sweat, and tears D:
+	//hoosiers put this together with blood, sweat, and tears D:     
+	//taken from gamesense if u couldn't tell thank u hoosiers :puppy_eyes:
 	public static void drawBoundingBoxWithSides(AxisAlignedBB axisAlignedBB, int width, JColor color, int sides){
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();

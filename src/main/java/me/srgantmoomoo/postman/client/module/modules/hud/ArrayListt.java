@@ -43,14 +43,35 @@ public class ArrayListt extends HudModule {
     	list.activeModules.clear();
     	for (Module module: ModuleManager.getModules()) {
     		if(!showHidden.isEnabled()) {
-    			if (module.isToggled() && !module.getCategory().name.equals("hud") && !module.getCategory().name.equals("client")) {
+    			if (module.isToggled()
+    					&& !module.getName().equalsIgnoreCase("Watermark")
+    					&& !module.getName().equalsIgnoreCase("Totems")
+    					&& !module.getName().equalsIgnoreCase("Ping")
+    					&& !module.getName().equalsIgnoreCase("Frames")
+    					&& !module.getName().equalsIgnoreCase("AutoCrystalInfo")
+    					&& !module.getName().equalsIgnoreCase("SurroundInfo")
+    					&& !module.getName().equalsIgnoreCase("ArrayList")
+    					&& !module.getName().equalsIgnoreCase("InventoryViewer")
+    					&& !module.getName().equalsIgnoreCase("Hey")
+    					&& !module.getName().equalsIgnoreCase("ArmorHud")
+    					&& !module.getName().equalsIgnoreCase("KeyStrokes")
+    					&& !module.getName().equalsIgnoreCase("DiscordRpc")
+    					&& !module.getName().equalsIgnoreCase("clickGui")
+    					&& !module.getName().equalsIgnoreCase("HudEditor")
+    					&& !module.getName().equalsIgnoreCase("TabGui")
+    					&& !module.getName().equalsIgnoreCase("MainMenuInfo")
+    					&& !module.getName().equalsIgnoreCase("coords")
+    					&& !module.getName().equalsIgnoreCase("Esp2dHelper")
+    					&& !module.getName().equalsIgnoreCase("killAuraInfo")
+    					&& !module.getName().equalsIgnoreCase("capes")
+    					&& !module.getName().equalsIgnoreCase("clientFont")) {
     				list.activeModules.add(module);
     			}
     		}else
     			if (module.isToggled() && !module.getName().equalsIgnoreCase("Esp2dHelper")) list.activeModules.add(module);
     	}
     	if(sortHeight.is("up") || sortHeight.is("down")) {
-    	list.activeModules.sort(Comparator.comparing(module -> -Main.getInstance().clickGui.guiInterface.getFontWidth(module.getName())));
+    	list.activeModules.sort(Comparator.comparing(module -> -Main.clickGui.guiInterface.getFontWidth(module.getName())));
     	}
     }
 

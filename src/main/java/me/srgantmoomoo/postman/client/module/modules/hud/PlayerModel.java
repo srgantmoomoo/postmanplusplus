@@ -19,7 +19,7 @@ import me.srgantmoomoo.postman.client.ui.clickgui.ClickGui;
 public class PlayerModel extends HudModule {
 	public BooleanSetting rect = new BooleanSetting("rect", this, true);
 	public NumberSetting size = new NumberSetting("size", this, 28, 10, 100, 1);
-	public ColorSetting color = new ColorSetting("rectColor", this, new JColor(121, 193, 255, 100)); 
+	public ColorSetting color = new ColorSetting("rectColor", this, new JColor(157, 216, 255, 255)); 
 	
 	public PlayerModel() {
     	super("playerModel","shows ur player model on ur hud.", new Point(1,30), Category.HUD);
