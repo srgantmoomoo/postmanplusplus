@@ -24,12 +24,14 @@ import me.srgantmoomoo.postman.client.ui.clickgui.ClickGui;
 import me.srgantmoomoo.postmanplusplus.ModuleManagerPlusPlus;
 import me.zero.alpine.EventBus;
 import me.zero.alpine.EventManager;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /*
  * Written by @SrgantMooMoo on 11/17/20.
@@ -62,9 +64,7 @@ public class Main {
 	
 	@Instance
 	public static Main instance;
-	
 	public Main() { instance = this; }
-	
 	public static Main getInstance() { return instance; }
 	
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
@@ -122,9 +122,8 @@ public class Main {
 
 	}
 
-
 	@EventHandler
-	public void init (FMLInitializationEvent event) {
+	public void init(FMLInitializationEvent event) {
 		// Create a thread with extClientInit
 		Thread t = new Thread(this::extClientInit);
 		// Start it

@@ -11,26 +11,30 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.srgantmoomoo.postman.api.util.render.JColor;
 import me.srgantmoomoo.postman.client.module.Category;
 import me.srgantmoomoo.postman.client.module.HudModule;
+import me.srgantmoomoo.postman.client.module.ModuleManager;
 import me.srgantmoomoo.postman.client.setting.settings.BooleanSetting;
 import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
 
-public class Coords extends HudModule {
-	public ColorSetting color = new ColorSetting("color", this, new JColor(172, 172, 172, 255)); 
+
+public class AutoCrystalHud extends HudModule {
+	private AutoCInfoList list=new AutoCInfoList();
+	
+	public ColorSetting color = new ColorSetting("color", this, new JColor(230, 0, 0, 255)); 
 	public BooleanSetting sort = new BooleanSetting("sortRight", this, false);
 
 
-	public Coords() {
-		super("coords", "shows ur coords on ur hud.", new Point(122, 57), Category.HUD);
-		this.addSettings(sort, color);
+	public AutoCrystalHud() {
+		super("autoCrystalHud", "shows u if autoCrystal is on or off.", new Point(-2, 39), Category.HUD);
+		this.addSettings(color, sort);
 	}
 	
 	@Override
 	public void populate (Theme theme) {
-		component = new ListComponent(getName(), theme.getPanelRenderer(), position, new CoordsList());
+		component = new ListComponent(getName(), theme.getPanelRenderer(), position, list);
 	}
 	
-	private class CoordsList implements HUDList {
-		
+	private class AutoCInfoList implements HUDList {
+
 		@Override
 		public int getSize() {
 			return 1;
@@ -38,9 +42,8 @@ public class Coords extends HudModule {
 
 		@Override
 		public String getItem(int index) {
-			return ChatFormatting.RESET + "(x)" + ChatFormatting.WHITE + mc.player.getPosition().getX()
-					+ ChatFormatting.RESET + "(y)" + ChatFormatting.WHITE + mc.player.getPosition().getY()
-					+ ChatFormatting.RESET + "(z)" + ChatFormatting.WHITE + mc.player.getPosition().getZ();
+			if (ModuleManager.isModuleEnabled("autoCrystal")) return ChatFormatting.GREEN + "autoC" + " on";
+			else return "autoC" + " off";
 		}
 
 		@Override
