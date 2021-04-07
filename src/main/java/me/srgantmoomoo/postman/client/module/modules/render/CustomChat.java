@@ -21,7 +21,7 @@ public class CustomChat extends Module {
     public NumberSetting maxWidth = new NumberSetting("Max Width", this, -1, -1, 500, 1);
     public NumberSetting xTranslation = new NumberSetting("X Translation", this, -1, -1, 700, 1);
     public NumberSetting yTranslation = new NumberSetting("Y Translation", this, -1, -1, 500, 1);
-    public NumberSetting customScale = new NumberSetting("Custom Scale", this, 1, -10, 10, .1);
+    public NumberSetting customScale = new NumberSetting("Custom Scale", this, 1, -3, 3, .05);
 
     public CustomChat() {
         super ("CustomChat", "Allow you to custom your chat", Keyboard.KEY_NONE, Category.RENDER);
