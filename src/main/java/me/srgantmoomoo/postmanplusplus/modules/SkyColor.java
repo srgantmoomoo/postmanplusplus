@@ -17,7 +17,7 @@ public class SkyColor extends Module {
 	public ColorSetting colorJ = new ColorSetting("color", this, new JColor(255, 255, 255, 255));
 
     public SkyColor() {
-        super("" + TextFormatting.RESET + TextFormatting.ITALIC + "skyColor" + TextFormatting.OBFUSCATED + "++", "colors the sky", Keyboard.KEY_NONE, Category.RENDER);
+        super("" + TextFormatting.RESET + TextFormatting.ITALIC + "skyColor" + TextFormatting.OBFUSCATED + "++", "colors the sky.", Keyboard.KEY_NONE, Category.RENDER);
         this.addSettings(fog, colorJ);
     }
     
