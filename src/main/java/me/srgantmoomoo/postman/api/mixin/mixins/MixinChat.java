@@ -2,6 +2,8 @@ package me.srgantmoomoo.postman.api.mixin.mixins;
 
 import me.srgantmoomoo.postman.client.module.ModuleManager;
 import me.srgantmoomoo.postman.client.module.modules.render.CustomChat;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,13 +22,25 @@ public class MixinChat {
         Gui.drawRect(left, top, right, bottom, ModuleManager.isModuleEnabled("CustomChat") ? CustomChat.backColorInt : color);
     }
 
+    // Custom Size
     @Redirect(method={"drawChat"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"))
     private void customSize(float x, float y, float z) {
+        GlStateManager.scale(CustomChat.customScaleVal, CustomChat.customScaleVal, 1f);
         GlStateManager.translate(   CustomChat.xTrans != -1 ? CustomChat.xTrans : x,
-                                    CustomChat.yTrans != -30 ? -CustomChat.yTrans : y,
+                                    CustomChat.yTrans != -1 ? -CustomChat.yTrans : y,
                                     z);
     }
 
+    // Color
+    @Redirect(method={"drawChat"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/gui/FontRenderer;drawStringWithShadow(Ljava/lang/String;FFI)I"))
+    private int drawStringWithShadow(FontRenderer fontRenderer, String text, float x, float y, int color) {
+        if (text.contains("postman")) {
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text, x, y, CustomChat.postManColorInt);
+        } else {
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text, x, y, color);
+        }
+        return 0;
+    }
 
     // This is for custom height
     @Inject(method = {"getChatHeight"}, at = @At("HEAD"), cancellable = true)
