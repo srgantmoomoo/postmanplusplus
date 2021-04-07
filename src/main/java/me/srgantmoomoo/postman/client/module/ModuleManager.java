@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import me.srgantmoomoo.postmanplusplus.modules.CustomChat;
 import org.lwjgl.input.Keyboard;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -68,7 +69,6 @@ public class ModuleManager {
 		modules.add(new ChestStealer());
 		//modules.add(new CoordExploit());
 		modules.add(new Criticals());
-		modules.add(new CustomChat());
 		modules.add(new DamageTiltCorrection());	
 		modules.add(new DeathCoords());	                             // --- integrate with notifications.
 		modules.add(new Dupe());	

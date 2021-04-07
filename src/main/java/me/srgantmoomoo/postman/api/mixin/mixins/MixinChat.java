@@ -1,7 +1,7 @@
 package me.srgantmoomoo.postman.api.mixin.mixins;
 
 import me.srgantmoomoo.postman.client.module.ModuleManager;
-import me.srgantmoomoo.postman.client.module.modules.render.CustomChat;
+import me.srgantmoomoo.postmanplusplus.modules.CustomChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;

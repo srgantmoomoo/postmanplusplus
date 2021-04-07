@@ -1,4 +1,4 @@
-package me.srgantmoomoo.postman.client.module.modules.render;
+package me.srgantmoomoo.postmanplusplus.modules;
 
 import me.srgantmoomoo.postman.api.util.render.JColor;
 import me.srgantmoomoo.postman.client.module.Category;
@@ -6,6 +6,7 @@ import me.srgantmoomoo.postman.client.module.Module;
 import me.srgantmoomoo.postman.client.setting.settings.BooleanSetting;
 import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
 import me.srgantmoomoo.postman.client.setting.settings.NumberSetting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.BossInfo;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import org.lwjgl.input.Keyboard;
@@ -24,7 +25,7 @@ public class CustomChat extends Module {
     public NumberSetting customScale = new NumberSetting("Custom Scale", this, 1, -3, 3, .05);
 
     public CustomChat() {
-        super ("CustomChat", "Allow you to custom your chat", Keyboard.KEY_NONE, Category.RENDER);
+        super ("" + TextFormatting.RESET + TextFormatting.ITALIC + "CustomChat" + TextFormatting.DARK_PURPLE + "++", "Allow you to custom your chat", Keyboard.KEY_NONE, Category.RENDER);
         this.addSettings(backColor, postmanColor, maxHeight, maxWidth, xTranslation, yTranslation, customScale);
     }
     public static int   backColorInt,
