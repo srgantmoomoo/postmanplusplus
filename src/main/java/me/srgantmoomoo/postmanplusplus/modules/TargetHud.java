@@ -37,7 +37,7 @@ public class TargetHud extends HudModule {
     private static EntityPlayer targetPlayer;
     
     public TargetHud() {
-        super("" + TextFormatting.RESET + TextFormatting.ITALIC + "targetHud" + TextFormatting.OBFUSCATED + "++", "targetttt.", new Point(0,70), Category.HUD);
+        super("" + TextFormatting.RESET + TextFormatting.ITALIC + "targetHud" + TextFormatting.OBFUSCATED + "++", "gives you a hud of your target opponent.", new Point(0,70), Category.HUD);
         this.addSettings(range, text, background);
     }
     
