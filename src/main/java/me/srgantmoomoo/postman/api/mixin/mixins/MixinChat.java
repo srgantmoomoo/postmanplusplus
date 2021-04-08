@@ -1,7 +1,9 @@
 package me.srgantmoomoo.postman.api.mixin.mixins;
 
-import me.srgantmoomoo.postman.client.module.ModuleManager;
-import me.srgantmoomoo.postmanplusplus.ModuleManagerPlusPlus;
+/*
+    - Fixed bug of some random lines appears
+ */
+import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
 import me.srgantmoomoo.postmanplusplus.modules.CustomChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,7 +22,10 @@ public class MixinChat {
     // This is changing the background of the chat
     @Redirect(method={"drawChat"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/gui/GuiNewChat;drawRect(IIIII)V"))
     private void drawRectHook(int left, int top, int right, int bottom, int color) {
-        Gui.drawRect(left, top, right, bottom, CustomChat.isEnabled ? CustomChat.backColorInt : color);
+        if (CustomChat.isEnabled) {
+            if (left != 0 && top != 0)
+                Gui.drawRect(left, top, right, bottom, CustomChat.backColorInt);
+        } else Gui.drawRect(left, top, right, bottom, color);
     }
 
     // Custom Size
@@ -40,13 +45,35 @@ public class MixinChat {
     @Redirect(method={"drawChat"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/gui/FontRenderer;drawStringWithShadow(Ljava/lang/String;FFI)I"))
     private int drawStringWithShadow(FontRenderer fontRenderer, String text, float x, float y, int color) {
         if (CustomChat.isEnabled) {
-            if (text.contains("postman")) {
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text, x, y, CustomChat.postManColorInt);
-            } else {
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text, x, y, color);
-            }
+            displayText(text, x, y, CustomChat.normalWordsColorInt, CustomChat.specialWordsColorInt, CustomChat.desyncColorValue);
         } else Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text, x, y, color);
         return 0;
+    }
+
+    private void displayText(String word, float x, float y, int normalColor, int specialColor, boolean desyncRainbow) {
+        String[] special = word.split("/s");
+        int width = 0;
+        int rainbowColor = 0;
+        for(int i = 0; i < special.length; i++) {
+            if (i % 2 == 0) {
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(special[i], x + width, y, normalColor);
+                width += Minecraft.getMinecraft().fontRenderer.getStringWidth(special[i]);
+            }
+            else {
+                if (!desyncRainbow) {
+                    Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(special[i], x + width, y, specialColor);
+                    width += Minecraft.getMinecraft().fontRenderer.getStringWidth(special[i]);
+                }
+                else {
+
+                    for(String character : special[i].split("(?<=\\G.)")) {
+                        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(character, x + width, y, ColorSetting.getRainbow(rainbowColor, CustomChat.alpha).getRGB());
+                        width += Minecraft.getMinecraft().fontRenderer.getStringWidth(character);
+                        rainbowColor += 1;
+                    }
+                }
+            }
+        }
     }
 
     // This is for custom height
