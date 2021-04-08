@@ -6,11 +6,20 @@ import me.srgantmoomoo.postman.client.module.Module;
 import me.srgantmoomoo.postman.client.setting.settings.BooleanSetting;
 import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
 import me.srgantmoomoo.postman.client.setting.settings.NumberSetting;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class CustomChat extends Module {
 
+    // Settings
     public ColorSetting backColor = new ColorSetting("BackColor", this, new JColor(0, 0, 0));
     public ColorSetting normalWordsColor = new ColorSetting("Normal Words Color", this, new JColor(255, 255, 255));
     public ColorSetting specialWordsColor = new ColorSetting("Special Words Color", this, new JColor(255, 0, 0));
@@ -22,6 +31,7 @@ public class CustomChat extends Module {
     public BooleanSetting desyncRainbow = new BooleanSetting("Desync Rainbow", this, true);
     public BooleanSetting addDate = new BooleanSetting("Add Date", this, true);
 
+    // Static variable
     public static int   backColorInt,
             specialWordsColorInt,
             normalWordsColorInt,
@@ -35,23 +45,27 @@ public class CustomChat extends Module {
 
     public static boolean isEnabled = false;
 
+    // Init
     public CustomChat() {
         super ("" + TextFormatting.RESET + TextFormatting.ITALIC + "CustomChat" + TextFormatting.DARK_PURPLE + "++", "Allow you to custom your chat", Keyboard.KEY_NONE, Category.RENDER);
-        this.addSettings(backColor, normalWordsColor, specialWordsColor, maxHeight, maxWidth, xTranslation, yTranslation, customScale, desyncRainbow);
+        this.addSettings(backColor, normalWordsColor, specialWordsColor, maxHeight, maxWidth, xTranslation, yTranslation, customScale, desyncRainbow, addDate);
     }
 
-
-    @Override
+    // Enable
     public void onEnable() {
         isEnabled = true;
+        if (addDate.isEnabled())
+            MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @Override
+    // Disable
     public void onDisable() {
         isEnabled = false;
+        if (addDate.isEnabled())
+            MinecraftForge.EVENT_BUS.unregister(this);
     }
 
-    @Override
+    // Update
     public void onUpdate() {
         backColorInt = backColor.getValue().getRGB();
         specialWordsColorInt = specialWordsColor.getValue().getRGB();
@@ -64,6 +78,14 @@ public class CustomChat extends Module {
         desyncColorValue = desyncRainbow.isEnabled();
         alpha = specialWordsColor.getColor().getAlpha();
         date = addDate.isEnabled();
+    }
+
+    // Message Recive
+    @SubscribeEvent
+    public void messageRecive(ClientChatReceivedEvent event) {
+        // Add date
+        Date date = new Date();
+        event.setMessage(new TextComponentString("/s<" + date.toString().split(" ")[3] + ">/s " + event.getMessage().getFormattedText()));
     }
 
 

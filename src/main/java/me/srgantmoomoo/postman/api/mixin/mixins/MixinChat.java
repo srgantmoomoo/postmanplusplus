@@ -1,8 +1,5 @@
 package me.srgantmoomoo.postman.api.mixin.mixins;
 
-/*
-    - Fixed bug of some random lines appears
- */
 import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
 import me.srgantmoomoo.postmanplusplus.modules.CustomChat;
 import net.minecraft.client.Minecraft;
@@ -22,8 +19,11 @@ public class MixinChat {
     // This is changing the background of the chat
     @Redirect(method={"drawChat"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/gui/GuiNewChat;drawRect(IIIII)V"))
     private void drawRectHook(int left, int top, int right, int bottom, int color) {
+        // If enabled
         if (CustomChat.isEnabled) {
+            // If it's not the scrollbar
             if (left != 0 && top != 0)
+                // Draw
                 Gui.drawRect(left, top, right, bottom, CustomChat.backColorInt);
         } else Gui.drawRect(left, top, right, bottom, color);
     }
@@ -31,8 +31,11 @@ public class MixinChat {
     // Custom Size
     @Redirect(method={"drawChat"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"))
     private void customSize(float x, float y, float z) {
+        // If enable
         if (CustomChat.isEnabled) {
+            // Custom Scale
             GlStateManager.scale(CustomChat.customScaleVal, CustomChat.customScaleVal, 1f);
+            // Translate it
             GlStateManager.translate(CustomChat.xTrans != -1 ? CustomChat.xTrans : x,
                     CustomChat.yTrans != -1 ? -CustomChat.yTrans : y,
                     z);
@@ -44,31 +47,42 @@ public class MixinChat {
     // Color
     @Redirect(method={"drawChat"}, at=@At(value="INVOKE", target="Lnet/minecraft/client/gui/FontRenderer;drawStringWithShadow(Ljava/lang/String;FFI)I"))
     private int drawStringWithShadow(FontRenderer fontRenderer, String text, float x, float y, int color) {
+        // If enable
         if (CustomChat.isEnabled) {
-            displayText(text, x, y, CustomChat.normalWordsColorInt, CustomChat.specialWordsColorInt, CustomChat.desyncColorValue);
+            // Display text
+            displayText(text, x, y);
         } else Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text, x, y, color);
         return 0;
     }
 
-    private void displayText(String word, float x, float y, int normalColor, int specialColor, boolean desyncRainbow) {
+    private void displayText(String word, float x, float y) {
+        // Split everything by specials
         String[] special = word.split("/s");
         int width = 0;
         int rainbowColor = 0;
+        // Iterate every words
         for(int i = 0; i < special.length; i++) {
+            // If it's a normal text
             if (i % 2 == 0) {
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(special[i], x + width, y, normalColor);
+                // Normal
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(special[i], x + width, y, CustomChat.normalWordsColorInt);
                 width += Minecraft.getMinecraft().fontRenderer.getStringWidth(special[i]);
             }
             else {
-                if (!desyncRainbow) {
-                    Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(special[i], x + width, y, specialColor);
+                // If we want normal rainbow
+                if (!CustomChat.desyncColorValue) {
+                    // Color with rainbow
+                    Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(special[i], x + width, y, CustomChat.specialWordsColorInt);
                     width += Minecraft.getMinecraft().fontRenderer.getStringWidth(special[i]);
                 }
                 else {
-
-                    for(String character : special[i].split("(?<=\\G.)")) {
+                    // Else, desync rainbow
+                    for(String character : special[i].split("")) {
+                        // Color 1 character
                         Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(character, x + width, y, ColorSetting.getRainbow(rainbowColor, CustomChat.alpha).getRGB());
+                        // Add width
                         width += Minecraft.getMinecraft().fontRenderer.getStringWidth(character);
+                        // Add rainbow
                         rainbowColor += 1;
                     }
                 }
