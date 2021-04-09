@@ -74,7 +74,7 @@ public class SaveLoad {
 				
 				if(setting instanceof ColorSetting) {
 					ColorSetting color = (ColorSetting) setting;
-					toSave.add("SET:" + mod.getName() + ":" + setting.name + ":" + color.toInteger());
+					toSave.add("SET:" + mod.getName() + ":" + setting.name + ":" + color.toInteger() + ":" + color.getRainbow());
 				}
 			}
 		}
@@ -119,12 +119,20 @@ public class SaveLoad {
 			if(s.toLowerCase().startsWith("mod:")) {
 				Module m = Main.moduleManager.getModule(args[1]);
 				if(m != null) {
-					if(m.getName().equals("clickGui") && m.getName().equals("hudEditor"))
-						m.setToggled(!Boolean.parseBoolean(args[2]));
+					// hud modules
+					if(m.getName().equals("clickGui")) m.setToggled(!Boolean.parseBoolean(args[2]));
+					if(m.getName().equals("hudEditor")) m.setToggled(!Boolean.parseBoolean(args[2]));
+					// normal modules that can cause crashes
+					if(m.getName().equals("protester")) m.setToggled(!Boolean.parseBoolean(args[2]));
+					if(m.getName().equals("blink")) m.setToggled(!Boolean.parseBoolean(args[2]));
+					if(m.getName().equals("autoDisconnect")) m.setToggled(!Boolean.parseBoolean(args[2]));
 					
-					if(!m.getName().equals("clickGui") && !m.getName().equals("hudEditor"))
-					m.setToggled(Boolean.parseBoolean(args[2]));
-					m.setKey(Integer.parseInt(args[3]));
+					
+					if(!m.getName().equals("clickGui") && !m.getName().equals("hudEditor") && !m.getName().equals("protester")
+							 && !m.getName().equals("blink") && !m.getName().equals("autoDisconnect")) {
+						m.setToggled(Boolean.parseBoolean(args[2]));
+						m.setKey(Integer.parseInt(args[3]));
+					}
 				}
 			}else if(s.toLowerCase().startsWith("set:")) {
 				Module m = Main.moduleManager.getModule(args[1]);
@@ -142,6 +150,7 @@ public class SaveLoad {
 						}
 						if(setting instanceof ColorSetting) {
 							((ColorSetting)setting).fromInteger(Integer.parseInt(args[3]));
+							((ColorSetting)setting).setRainbow(Boolean.parseBoolean(args[4]));
 						}
 					}
 				}

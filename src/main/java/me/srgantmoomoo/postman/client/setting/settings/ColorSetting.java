@@ -54,7 +54,7 @@ public class ColorSetting extends Setting implements com.lukflug.panelstudio.set
 
 	@Override
 	public void setValue(Color value) {
-		setValue(getRainbow(),new JColor(value));
+		setValue(getRainbow(), new JColor(value));
 	}
 
 	@Override
