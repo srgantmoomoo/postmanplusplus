@@ -20,16 +20,16 @@ import java.util.GregorianCalendar;
 public class CustomChat extends Module {
 
     // Settings
-    public ColorSetting backColor = new ColorSetting("BackColor", this, new JColor(0, 0, 0));
-    public ColorSetting normalWordsColor = new ColorSetting("Normal Words Color", this, new JColor(255, 255, 255));
-    public ColorSetting specialWordsColor = new ColorSetting("Special Words Color", this, new JColor(255, 0, 0));
-    public NumberSetting maxHeight = new NumberSetting("Max Height", this, -1, -1, 500, 1);
-    public NumberSetting maxWidth = new NumberSetting("Max Width", this, -1, -1, 500, 1);
-    public NumberSetting xTranslation = new NumberSetting("X Translation", this, -1, -1, 700, 1);
-    public NumberSetting yTranslation = new NumberSetting("Y Translation", this, -1, -1, 500, 1);
-    public NumberSetting customScale = new NumberSetting("Custom Scale", this, 1, -3, 3, .05);
-    public BooleanSetting desyncRainbow = new BooleanSetting("Desync Rainbow", this, true);
-    public BooleanSetting addDate = new BooleanSetting("Add Date", this, true);
+    public ColorSetting backColor = new ColorSetting("backColor", this, new JColor(0, 0, 0));
+    public ColorSetting normalWordsColor = new ColorSetting("normalWordsColor", this, new JColor(255, 255, 255));
+    public ColorSetting specialWordsColor = new ColorSetting("specialWordsColor", this, new JColor(255, 0, 0));
+    public NumberSetting maxHeight = new NumberSetting("maxHeight", this, -1, -1, 500, 1);
+    public NumberSetting maxWidth = new NumberSetting("maxWidth", this, -1, -1, 500, 1);
+    public NumberSetting xTranslation = new NumberSetting("xTranslation", this, -1, -1, 700, 1);
+    public NumberSetting yTranslation = new NumberSetting("yTranslation", this, -1, -1, 500, 1);
+    public NumberSetting customScale = new NumberSetting("customScale", this, 1, -3, 3, .05);
+    public BooleanSetting desyncRainbow = new BooleanSetting("desyncRainbow", this, true);
+    public BooleanSetting addDate = new BooleanSetting("addDate", this, true);
 
     // Static variable
     public static int   backColorInt,
@@ -47,7 +47,7 @@ public class CustomChat extends Module {
 
     // Init
     public CustomChat() {
-        super ("" + TextFormatting.RESET + TextFormatting.ITALIC + "CustomChat" + TextFormatting.DARK_PURPLE + "++", "Allow you to custom your chat", Keyboard.KEY_NONE, Category.RENDER);
+        super ("" + TextFormatting.RESET + TextFormatting.ITALIC + "customChat" + TextFormatting.OBFUSCATED + "++", "allows you to customize chat.", Keyboard.KEY_NONE, Category.RENDER);
         this.addSettings(backColor, normalWordsColor, specialWordsColor, maxHeight, maxWidth, xTranslation, yTranslation, customScale, desyncRainbow, addDate);
     }
 
