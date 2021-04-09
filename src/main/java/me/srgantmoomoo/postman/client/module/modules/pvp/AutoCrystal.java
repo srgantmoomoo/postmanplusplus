@@ -1,6 +1,7 @@
 package me.srgantmoomoo.postman.client.module.modules.pvp;
 
 import me.srgantmoomoo.Main;
+import me.srgantmoomoo.Reference;
 import me.srgantmoomoo.postman.api.event.events.PacketEvent;
 import me.srgantmoomoo.postman.api.event.events.RenderEvent;
 import me.srgantmoomoo.postman.api.util.render.JColor;
@@ -71,10 +72,10 @@ import org.lwjgl.input.Keyboard;
 public class AutoCrystal extends Module {
 	
 	// rewrite
-	public BooleanSetting switchToCrystal = new BooleanSetting("switchToCrystal", this, false);
-	
 	public BooleanSetting breakCrystal = new BooleanSetting("breakCrystal", this, true);
 	public BooleanSetting placeCrystal = new BooleanSetting("placeCrystal", this, true);
+	
+	public ModeSetting switchHand = new ModeSetting("switch", this, "off", "off", "onEnable", "detect");
 	
 	public ModeSetting logic = new ModeSetting("logic", this, "break, place", "break, place", "place, break");
 	
@@ -86,7 +87,6 @@ public class AutoCrystal extends Module {
 	
 	public NumberSetting placeRange = new NumberSetting("placeRange", this, 4.4, 0.0, 6.0, 0.1);
 	
-	//public BooleanSetting facePlace = new BooleanSetting("facePlace", this, false);
 	public NumberSetting facePlaceValue = new NumberSetting("facePlcVal", this, 8, 0, 36, 1);
 	
 	public BooleanSetting highPing = new BooleanSetting("highPing", this, true);
@@ -116,11 +116,11 @@ public class AutoCrystal extends Module {
 	
 	public BooleanSetting outline = new BooleanSetting("outline", this, false);
 	public BooleanSetting showDamage = new BooleanSetting("showDamage", this, true);
-	public ColorSetting color = new ColorSetting("color", this, new JColor(157, 216, 255, 255));
+	public ColorSetting color = new ColorSetting("color", this, Reference.POSTMAN_COLOR);
 
 	public AutoCrystal() {
 		super ("autoCrystal", "best ca on the block.", Keyboard.KEY_NONE, Category.PVP);
-		this.addSettings(switchToCrystal, breakCrystal, placeCrystal, logic, breakSpeed, breakType, breakMode, breakHand, breakRange, placeRange, highPing, antiGhost, raytrace, rotate,
+		this.addSettings(breakCrystal, placeCrystal, logic, switchHand, breakSpeed, breakType, breakMode, breakHand, breakRange, placeRange, highPing, antiGhost, raytrace, rotate,
 				spoofRotations, mode113, multiplace, multiplaceValue, multiplacePlus, antiSuicide, maxSelfDmg, antiSelfPop, minDmg, facePlaceValue, enemyRange, wallsRange, showDamage, outline, color);
 	}
 	
@@ -134,6 +134,8 @@ public class AutoCrystal extends Module {
 	public boolean active = false;
 	boolean offHand = false;
 	private boolean togglePitch = false;
+	int oldSlot;
+	public static boolean placing = false;
 	
 	JTimer timer = new JTimer();
 	
@@ -141,8 +143,13 @@ public class AutoCrystal extends Module {
 	public void onEnable() {
 		super.onEnable();
 		Main.EVENT_BUS.subscribe(this);
+		
+		oldSlot = mc.player.inventory.currentItem;
+		
 		PlacedCrystals.clear();
+		
 		active = false;
+		placing = false;
 		ghosting = false;
 	}
 	
@@ -150,25 +157,32 @@ public class AutoCrystal extends Module {
 	public void onDisable() {
 		super.onDisable();
 		Main.EVENT_BUS.unsubscribe(this);
+		
+		if(switchHand.is("onEnable")) mc.player.inventory.currentItem = oldSlot;
+		
 		renderBlock = null;
         renderEnt = null;
+        
         resetRotation();
         PlacedCrystals.clear();
+        
         active = false;
+        placing = false;
         ghosting = false;
 	}
 	
 	public void onUpdate() {
+		if(PlacedCrystals.size() > 3) {
+			if(timer.getTimePassed() > 40L) {
+				if(PlacedCrystals.size() > 3) {
+					ghosting = true;
+				}
+			}
+		}
+		
 		if(mc.player == null || mc.world == null)
 			return;
 		implementLogic();
-		
-		if(antiGhost.isEnabled()) {
-			// && player is placeablee
-			if(breakCrystal.isEnabled() && placeCrystal.isEnabled() && !active) {
-				ghosting = true;
-			}else ghosting = false;
-		}
 	}
 	
 	private void implementLogic() {
@@ -196,7 +210,7 @@ public class AutoCrystal extends Module {
 
 			 if(timer.getTimePassed() / 50 >= 20 - breakSpeed.getValue()) {
 				 timer.reset();
-				 active=true;
+				 active = true;
 				 
 				 if(rotate.isEnabled()) {
 					 lookAtPacket(crystal.posX, crystal.posY, crystal.posZ, mc.player);
@@ -259,16 +273,17 @@ public class AutoCrystal extends Module {
 		if(!placeCrystal.isEnabled())
 			return;
 		
+		// switch system (onEnable)
 		if (!offHand && mc.player.inventory.currentItem != crystalSlot) {
-            if (this.switchToCrystal.isEnabled()) {
+            if (this.switchHand.is("onEnable")) {
                     mc.player.inventory.currentItem = crystalSlot;
                     resetRotation();
                     this.switchCooldown = true;
             }
-            return;
         }
 		
 		for(Entity entity : entities) {
+			
 			if(entity == mc.player || FriendManager.isFriend(entity.getName()) || ((EntityLivingBase)entity).getHealth() <= 0) continue;
 			
 			for(BlockPos blockPos : blocks) {
@@ -333,11 +348,31 @@ public class AutoCrystal extends Module {
                 if (blockPos1 != null) {
                     if (raytrace.isEnabled() && enumFacing != null) {
                         mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(blockPos1, enumFacing, offHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0, 0, 0));
+                        placing = true;
                     } else if (blockPos1.getY() == 255) {
                         mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(blockPos1, EnumFacing.DOWN, offHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0, 0, 0));
+                        placing = true;
                     } else {
                         mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(blockPos1, EnumFacing.UP, offHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0, 0, 0));
+                        placing = true;
                     }
+                    // switch system (detect)
+                    boolean switched = false;
+                    if (!offHand && mc.player.inventory.currentItem != crystalSlot) {
+	                    if(this.switchHand.is("detect")) {
+	                    	mc.player.inventory.currentItem = crystalSlot;
+	                        resetRotation();
+	                        this.switchCooldown = true;
+	                        switched = true;
+	                    }
+                    }
+                    /*if(!switched) {
+                    	mc.player.inventory.currentItem = oldSlot;
+                        resetRotation();
+                        this.switchCooldown = true;
+                        switched = false;
+                    }*/
+                    
                     mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
                     PlacedCrystals.add(blockPos1);
                     
@@ -357,10 +392,6 @@ public class AutoCrystal extends Module {
             timer.reset();
         }
 		
-	}
-	
-	private void antiGhost() {
-
 	}
 	
 	public void onWorldRender(RenderEvent event) {
@@ -502,7 +533,6 @@ public class AutoCrystal extends Module {
     
     private List<BlockPos> findCrystalBlocks() {
         NonNullList<BlockPos> positions = NonNullList.create();
-        // positions.addAll(getSphere(loc, r, h, hollow, sphere, plus_y))
         positions.addAll(getSphere(getPlayerPos(), (float)placeRange.getValue(), (int)placeRange.getValue(), false, true, 0).stream().filter(this::canPlaceCrystal).collect(Collectors.toList()));
         return positions;
     }

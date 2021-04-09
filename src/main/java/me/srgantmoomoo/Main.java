@@ -24,14 +24,12 @@ import me.srgantmoomoo.postman.client.ui.clickgui.ClickGui;
 import me.srgantmoomoo.postmanplusplus.ModuleManagerPlusPlus;
 import me.zero.alpine.EventBus;
 import me.zero.alpine.EventManager;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /*
  * Written by @SrgantMooMoo on 11/17/20.
@@ -79,8 +77,7 @@ public class Main {
 	}
 
 	private void loadCfg() {
-		saveLoad = new SaveLoad();
-		printLog("configs initialized.");
+		
 	}
 
 	public void extClientInit() {
@@ -113,6 +110,9 @@ public class Main {
 		clickGui = new ClickGui();
 		printLog("clickGui initialized.");
 
+		saveLoad = new SaveLoad();
+		printLog("configs initialized.");
+		
 		clickGuiSave = new ClickGuiSave();
 		clickGuiLoad = new ClickGuiLoad();
 		Runtime.getRuntime().addShutdownHook(new ConfigStopper());

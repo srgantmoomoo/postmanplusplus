@@ -8,14 +8,13 @@ import com.lukflug.panelstudio.theme.Theme;
 import com.mojang.realmsclient.gui.ChatFormatting;
 
 import me.srgantmoomoo.Reference;
-import me.srgantmoomoo.postman.api.util.render.JColor;
 import me.srgantmoomoo.postman.client.module.Category;
 import me.srgantmoomoo.postman.client.module.HudModule;
 import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
 
 
 public class Watermark extends HudModule {
-	public ColorSetting color = new ColorSetting("color", this, new JColor(157, 216, 255, 255)); 
+	public ColorSetting color = new ColorSetting("color", this, Reference.POSTMAN_COLOR); 
 
 	public Watermark() {
 		super("watermark", "postman watermark!", new Point(-2,1), Category.HUD);

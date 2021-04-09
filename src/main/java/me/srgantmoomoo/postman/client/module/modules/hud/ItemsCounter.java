@@ -6,34 +6,44 @@ import java.awt.Point;
 import com.lukflug.panelstudio.hud.HUDList;
 import com.lukflug.panelstudio.hud.ListComponent;
 import com.lukflug.panelstudio.theme.Theme;
-import com.mojang.realmsclient.gui.ChatFormatting;
 
 import me.srgantmoomoo.postman.api.util.render.JColor;
 import me.srgantmoomoo.postman.client.module.Category;
 import me.srgantmoomoo.postman.client.module.HudModule;
-import me.srgantmoomoo.postman.client.module.ModuleManager;
 import me.srgantmoomoo.postman.client.setting.settings.BooleanSetting;
 import me.srgantmoomoo.postman.client.setting.settings.ColorSetting;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 
-public class SurroundInfo extends HudModule {
-	private SurroundInfoList list=new SurroundInfoList();
+public class ItemsCounter extends HudModule {
+	private ItemsCounterList list = new ItemsCounterList();
 	
-	public ColorSetting color = new ColorSetting("color", this, new JColor(230, 0, 0, 255)); 
+	public ColorSetting color = new ColorSetting("color", this, new JColor(218, 165, 32, 255)); 
 	public BooleanSetting sort = new BooleanSetting("sortRight", this, false);
 
-	public SurroundInfo() {
-		super("surroundInfo", "shows if surround is on or off.", new Point(-3,59), Category.HUD);
+	public ItemsCounter() {
+		super("totems", "shows how many totems u have on ur hud.", new Point(-2,11), Category.HUD);
 		this.addSettings(sort, color);
 	}
+	
+	   public void onRender() {
+	    	list.totems = mc.player.inventory.mainInventory.stream()
+	    			.filter(itemStack -> itemStack.getItem() == Items.TOTEM_OF_UNDYING)
+	    			.mapToInt(ItemStack::getCount).sum();
+	    	if (mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING)
+	    		list.totems++;
+	    }
 	
 	@Override
 	public void populate (Theme theme) {
 		component = new ListComponent(getName(), theme.getPanelRenderer(), position, list);
 	}
 	
-	private class SurroundInfoList implements HUDList {
+	private class ItemsCounterList implements HUDList {
 
+		public int totems = 0;
+		
 		@Override
 		public int getSize() {
 			return 1;
@@ -41,8 +51,7 @@ public class SurroundInfo extends HudModule {
 
 		@Override
 		public String getItem(int index) {
-			if (ModuleManager.isModuleEnabled("surround")) return ChatFormatting.GREEN + "srnd" + " on";
-			else return "srnd" + " off";
+			return "" + totems;
 		}
 
 		@Override

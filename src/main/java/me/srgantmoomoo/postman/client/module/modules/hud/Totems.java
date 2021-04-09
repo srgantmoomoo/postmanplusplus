@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 
 
 public class Totems extends HudModule {
-	private TotemList list=new TotemList();
+	private TotemList list = new TotemList();
 	
 	public ColorSetting color = new ColorSetting("color", this, new JColor(218, 165, 32, 255)); 
 	public BooleanSetting sort = new BooleanSetting("sortRight", this, false);
@@ -42,7 +42,7 @@ public class Totems extends HudModule {
 	
 	private class TotemList implements HUDList {
 
-		public int totems=0;
+		public int totems = 0;
 		
 		@Override
 		public int getSize() {

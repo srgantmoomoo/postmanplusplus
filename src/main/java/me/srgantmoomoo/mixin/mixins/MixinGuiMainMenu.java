@@ -1,4 +1,4 @@
-package me.srgantmoomoo.postman.api.mixin.mixins;
+package me.srgantmoomoo.mixin.mixins;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,10 +19,10 @@ public class MixinGuiMainMenu extends GuiScreen {
 		if(ModuleManager.getModuleByName("mainMenuWatermark").isToggled()) {
 			FontRenderer fr = mc.fontRenderer;
 		    fr.drawStringWithShadow(TextFormatting.ITALIC + Reference.NAME + TextFormatting.WHITE + " by" + TextFormatting.GRAY + "" +
-		    		TextFormatting.ITALIC + " SrgantMooMoo", 2, 2, 0xff9dd8ff); 
-		    fr.drawStringWithShadow(TextFormatting.WHITE + "ur on version " + TextFormatting.RESET + TextFormatting.ITALIC + Reference.VERSION + TextFormatting.WHITE + "!", 2, 12, 0xff9dd8ff);
-		    fr.drawStringWithShadow("https://github.com/moomooooo/postman", 2, 22, 0xff9dd8ff);
-		    fr.drawStringWithShadow("https://discord.gg/Jd8EmEuhb5", 2, 32, 0xff9dd8ff);
+		    		TextFormatting.ITALIC + " SrgantMooMoo", 2, 2, 0xff79c2ec); 
+		    fr.drawStringWithShadow(TextFormatting.WHITE + "ur on version " + TextFormatting.WHITE + TextFormatting.ITALIC + Reference.VERSION + TextFormatting.RESET + TextFormatting.WHITE + "!", 2, 12, 0xff79c2ec);
+		    fr.drawStringWithShadow("https://github.com/moomooooo/postman", 2, 22, 0xff79c2ec);
+		    fr.drawStringWithShadow("https://discord.gg/Jd8EmEuhb5", 2, 32, 0xff79c2ec);
 		}
 	}
 }
