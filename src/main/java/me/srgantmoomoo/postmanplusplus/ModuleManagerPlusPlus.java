@@ -1,6 +1,5 @@
 package me.srgantmoomoo.postmanplusplus;
 
-import me.srgantmoomoo.postman.client.module.Module;
 import me.srgantmoomoo.postman.client.module.ModuleManager;
 import me.srgantmoomoo.postmanplusplus.modules.CustomChat;
 import me.srgantmoomoo.postmanplusplus.modules.InstantMine;

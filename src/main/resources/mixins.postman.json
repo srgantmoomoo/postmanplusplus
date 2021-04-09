@@ -9,7 +9,6 @@
     "MixinBlockSlimeBlock",
     "MixinBlockSoulSand",
     "MixinBlockWeb",
-    "MixinChat",
     "MixinEntity",
     "MixinEntityPlayer",
     "MixinEntityPlayerSP",
