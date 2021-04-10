@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 
 public class Discord {
 
-    private static String discordID = "772234731882151946";
+    private static String discordID = "815053529651609620";
     private static DiscordRichPresence discordRichPresence = new DiscordRichPresence();
     private static DiscordRPC discordRPC = DiscordRPC.INSTANCE;
 
@@ -20,8 +20,8 @@ public class Discord {
 
         discordRichPresence.startTimestamp = System.currentTimeMillis() / 1000L;
         discordRichPresence.details = Minecraft.getMinecraft().player.getName();
-        discordRichPresence.largeImageKey = "postmanlogo";
-        discordRichPresence.largeImageText = "postman strong";
+        discordRichPresence.largeImageKey = "postman--";
+        discordRichPresence.largeImageText = "postman++ is yes";
         discordRichPresence.state = "im on version " + Reference.VERSION + "!";
         discordRPC.Discord_UpdatePresence(discordRichPresence);
     }
