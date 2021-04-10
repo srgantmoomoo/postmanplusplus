@@ -85,7 +85,7 @@ public class ModuleManager {
 		modules.add(new KillAura());	
 		modules.add(new LiquidPlace());
 		//modules.add(new LogOutSpot());  // unstarted
-		//modules.add(new LongJump());   // unstarted
+		modules.add(new LongJump());   // wip
 		modules.add(new LowOffHand());
 		modules.add(new Mcf());
 		modules.add(new Multitask());
