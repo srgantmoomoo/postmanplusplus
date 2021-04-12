@@ -65,6 +65,7 @@ public class ModuleManager {
 		modules.add(new CameraClip());	
 		modules.add(new ChatSuffix());
 		modules.add(new ChestStealer());
+		modules.add(new ConfigCrystal());
 		//modules.add(new CoordExploit());
 		modules.add(new Criticals());	
 		modules.add(new DamageTiltCorrection());	
@@ -74,6 +75,7 @@ public class ModuleManager {
 		//modules.add(new ElytraReplace());  // unstarted
 		modules.add(new Esp());
 		modules.add(new FastUse());
+		modules.add(new Fly());
 		modules.add(new FootExp());
 		modules.add(new Freecam());	
 		modules.add(new FullBright());	
@@ -85,7 +87,7 @@ public class ModuleManager {
 		modules.add(new KillAura());	
 		modules.add(new LiquidPlace());
 		//modules.add(new LogOutSpot());  // unstarted
-		modules.add(new LongJump());   // wip
+		//modules.add(new LongJump());   // unstarted
 		modules.add(new LowOffHand());
 		modules.add(new Mcf());
 		modules.add(new Multitask());
@@ -102,6 +104,7 @@ public class ModuleManager {
 		modules.add(new PlayerClone());
 		modules.add(new PortalGodMode());
 		modules.add(new Protester());
+		modules.add(new Refill());
 		modules.add(new ReverseStep());
 		modules.add(new SafeWalk());
 		//modules.add(new Scaffold());	// unstarted
@@ -115,10 +118,11 @@ public class ModuleManager {
 		modules.add(new Tracers());
 		modules.add(new Velocity());	
 		modules.add(new ViewModel());	
+		modules.add(new World());
 		//modules.add(new Xray());    // unstarted						-------------------------
 		//hud
 		modules.add(new Watermark());
-		modules.add(new World());
+		modules.add(new Welcomer());
 		modules.add(new Totems());
 		modules.add(new Ping());
 		modules.add(new Frames());
