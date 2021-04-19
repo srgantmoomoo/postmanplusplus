@@ -61,6 +61,7 @@ public class ModuleManager {
 		modules.add(new AutoUse());	
 		modules.add(new AutoWalk());
 		modules.add(new Backdoor2b2t());
+		modules.add(new Baritone());                       // baritone
 		modules.add(new Blink());	
 		modules.add(new CameraClip());	
 		modules.add(new ChatSuffix());
@@ -91,7 +92,7 @@ public class ModuleManager {
 		modules.add(new LowOffHand());
 		modules.add(new Mcf());
 		modules.add(new Multitask());
-		//modules.add(new Nametags());	// unstarted           									---------------------------
+		modules.add(new Nametags());	// unstarted           									---------------------------
 		//modules.add(new NewChunks());	// unstarted
 		modules.add(new NoFall());
 		modules.add(new NoHandShake());	
@@ -124,6 +125,8 @@ public class ModuleManager {
 		modules.add(new Watermark());
 		modules.add(new Welcomer());
 		modules.add(new Totems());
+		modules.add(new Gapples());
+		modules.add(new Crystals());
 		modules.add(new Ping());
 		modules.add(new Frames());
 		modules.add(new AutoCrystalHud());

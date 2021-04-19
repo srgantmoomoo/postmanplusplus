@@ -22,7 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class AutoCope extends Module {
-	public ModeSetting msg = new ModeSetting("msg", this, "cope&seethe", "cope&seethe", "u suck", "ez pz", "gg");
+	public ModeSetting msg = new ModeSetting("msg", this, "cope&seethe", "cope&seethe", "u suck", "ez pz", "gg", "customMsg");
 	public BooleanSetting greenText = new BooleanSetting("greenText", this, true);
 	
 	public AutoCope() {
@@ -32,6 +32,11 @@ public class AutoCope extends Module {
 	int delay = 0;
     private static final ConcurrentHashMap<Object, Integer> targetedPlayers = new ConcurrentHashMap<Object, Integer>();
 
+    public static String customMsgArg = "";
+    public static void setMessage(String msg) {
+    	customMsgArg = msg;
+    }
+    
     @Override
     public void onEnable() {
     	Main.EVENT_BUS.subscribe(this);
@@ -123,6 +128,7 @@ public class AutoCope extends Module {
         if(msg.is("u suck")) message = starter + "wowowow u suck, postman owns u now.";
         if(msg.is("ez pz")) message = starter + "ez pz";
         if(msg.is("gg")) message = starter + "gg";
+        if(msg.is("customMsg")) message = starter + customMsgArg;
         
         mc.player.connection.sendPacket(new CPacketChatMessage(message));
     }

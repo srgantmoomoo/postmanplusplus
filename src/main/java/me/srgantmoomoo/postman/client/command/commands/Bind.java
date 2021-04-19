@@ -12,7 +12,7 @@ import me.srgantmoomoo.postman.client.module.ModuleManager;
 public class Bind extends Command {
 	
 	public Bind() {
-		super("bind", "bind modules to specific keys.", "bind <name> <key> | bind clear", "b");
+		super("bind", "bind modules to specific keys.", "bind <name> <key> | bind clear", "bi");
 	}
 
 	@Override
@@ -43,9 +43,9 @@ public class Bind extends Command {
 					module.keyCode.setKeyCode(Keyboard.KEY_NONE);
 				}
 				ModuleManager.addChatMessage("cleared all binds.");
-			} else CommandManager.correctUsageMsg("", getName(), getSyntax());
+			} else CommandManager.correctUsageMsg(getName(), getSyntax());
 		}
-		if(args.length == 0) CommandManager.correctUsageMsg("", getName(), getSyntax());
+		if(args.length == 0) CommandManager.correctUsageMsg(getName(), getSyntax());
 	}
 
 }

@@ -48,7 +48,6 @@ public class Main {
 	public static CommandManager commandManager;
 	public static FriendManager friendManager;
 	public static SaveLoad saveLoad;
-	public static TabGui tabGui;
 	public static Cape cape;
 	public static ClickGui clickGui;
 	public static EventProcessor eventProcessor;
@@ -62,90 +61,53 @@ public class Main {
 	
 	@Instance
 	public static Main instance;
-	public Main() { instance = this; }
-	public static Main getInstance() { return instance; }
+	
+	public Main() {
+		instance = this;
+	}
+	
+	public static Main getInstance() {
+		return instance;
+	}
 	
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
 	public static CommonProxy proxy;
-
-	public Object syncronize = new Object();
-
-	public void fontInit() {
-
-		customFontRenderer = new CustomFontRenderer(new Font("Comic Sans MS", Font.PLAIN, 18), false,false);
-		printLog("custom font initialized.");
-	}
-
-	private void loadCfg() {
-		
-	}
-
-	public void extClientInit() {
+	
+	@EventHandler
+	public void init (FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		eventProcessor = new EventProcessor();
-		printLog("postman event system initialized.");
+		log.info("postman event system initialized.");
 
 		settingManager = new SettingManager();
-		printLog("settings system initialized.");
+		log.info("settings system initialized.");
 
 		moduleManager = new ModuleManager();
-		printLog("module system initialized.");
+		log.info("module system initialized.");
 		
 		moduleManagerPlusPlus = new ModuleManagerPlusPlus();
-		printLog("module system initialized.");
+		log.info("modulemanagerplusplus initialized.");
 
 		commandManager = new CommandManager();
-		printLog("command system initialized.");
+		log.info("command system initialized.");
 		
 		friendManager = new FriendManager();
-		printLog("friend system initialized.");
+		log.info("friend system initialized.");
 
 		cape = new Cape();
-		printLog("capes initialized.");
-
-		tabGui = new TabGui();
-		printLog("tabgui initialized.");
+		log.info("capes initialized.");
 
 		clickGui = new ClickGui();
-		printLog("clickGui initialized.");
-
-		saveLoad = new SaveLoad();
-		printLog("configs initialized.");
+		log.info("clickGui initialized.");
 		
 		clickGuiSave = new ClickGuiSave();
 		clickGuiLoad = new ClickGuiLoad();
 		Runtime.getRuntime().addShutdownHook(new ConfigStopper());
-		printLog("gui config initialized.");
+		saveLoad = new SaveLoad();
+		log.info("configs initialized.");
 		
-		printLog("postman finished initializing.");
-
-	}
-
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		// Create a thread with extClientInit
-		Thread t = new Thread(this::extClientInit);
-		// Start it
-		t.start();
-		// Run opengl
-		fontInit();
-		try {
-			// Wait for extClientInit to finish
-			t.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		log.info("postman initialization finished.");
-		// Start an async thread with loadCfg. I dunno why but, for some reasons, you cannot put this with
-		// The other, if you do, it will create problems with CustomFontRenderer
-		new Thread(this::loadCfg).start();
-
-	}
 	
-	public void printLog(String text) {
-		synchronized (syncronize) {
-			log.info(text);
-		}
 	}
 }
