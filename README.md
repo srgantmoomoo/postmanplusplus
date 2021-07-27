@@ -1,5 +1,8 @@
 # postmanplusplus
 postman++ is yes.
+
+postman++ was paid version of the [postman](https://github.com/moomooooo/postman) project. <br>
+it is now being publicized cause i have no reason to keep it private lol
 <hr>
 
 ***just some appreciation for the original postman++ users... :)*** 
