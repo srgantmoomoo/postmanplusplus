@@ -24,7 +24,7 @@ it is now being publicized cause i have no reason to keep it private lol
 
 **given** <br>
 - kfc or **♿kfc♿#5760** im in love with kfc. has been here since present... if u even know what that is.
-- piggy or **osu tablet user#8974**. very based person, i love piggy 0_0
+- piggy or **hoodscientist#8974**. very based person, i love piggy 0_0
 - recior or **recior#7317**. very annoying at times... i took his ++ access away at one point but i gave it back now lol. ur very cool no matter what recior :) also made postman bot lol
 - mux or **mux(MX77)#4317**. the first server booster and very cool human being.
 - troll or **TheTroll2001#9256**. one of the only ppl i still know in this community who used to play in like 2016 :')
