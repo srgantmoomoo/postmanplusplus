@@ -1,3 +1,6 @@
+## archived
+this was a project that had only lived during the lifetime of postman in forge 1.12.2 during the surge of players from the pandemic. unfortunately following the publication of its code, any devlopment of it had ceased, including from myself. the community that once drove this client to fruition is no longer. i thank all of those that were there for their time, i love you all <3
+
 # postmanplusplus
 postman++ is yes.
 
